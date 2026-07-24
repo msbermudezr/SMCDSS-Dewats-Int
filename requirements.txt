@@ -1,0 +1,13 @@
+streamlit
+pandas
+numpy
+matplotlib
+folium
+streamlit-folium
+geopandas
+shapely
+openpyxl
+osmnx
+shapely
+pyproj
+earthengine-api
