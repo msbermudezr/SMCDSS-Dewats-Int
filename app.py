@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from streamlit_folium import st_folium
 import folium
-import local_p as lp
+import local_p_i as lp
 import data_bckb as db
 from shapely.geometry import Point
 import time
