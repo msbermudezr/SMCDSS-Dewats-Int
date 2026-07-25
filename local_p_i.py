@@ -14,7 +14,10 @@ import ee
 from google.oauth2 import service_account
 
 def initialize_ee():
-    if not ee.data.is_initialized():
+    try:
+        # Check if Earth Engine is already initialized
+        ee.data.getAlgorithms()
+    except Exception:
         service_account_info = dict(st.secrets["gcp_service_account"])
         
         credentials = service_account.Credentials.from_service_account_info(
