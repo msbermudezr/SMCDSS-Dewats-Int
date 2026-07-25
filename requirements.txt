@@ -8,6 +8,6 @@ geopandas
 shapely
 openpyxl
 osmnx
-shapely
 pyproj
 earthengine-api
+google-auth
