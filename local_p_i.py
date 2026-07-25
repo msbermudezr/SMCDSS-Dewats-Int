@@ -14,21 +14,21 @@ import ee
 from google.oauth2 import service_account
 
 def initialize_ee():
-    try:
-        # Check if Earth Engine is already initialized
-        ee.data.getAlgorithms()
-    except Exception:
-        service_account_info = dict(st.secrets["gcp_service_account"])
-        
-        credentials = service_account.Credentials.from_service_account_info(
-            service_account_info,
-            scopes=['https://www.googleapis.com/auth/earthengine']
-        )
-        
-        ee.Initialize(
-            credentials=credentials, 
-            project=service_account_info["project_id"]
-        )
+    if not ee.data.is_initialized():
+        try:
+            service_account_info = dict(st.secrets["gcp_service_account"])
+            credentials = service_account.Credentials.from_service_account_info(
+                service_account_info,
+                scopes=['https://www.googleapis.com/auth/earthengine']
+            )
+            ee.Initialize(
+                credentials=credentials, 
+                project=service_account_info["project_id"]
+            )
+        except Exception as e:
+            # This prints the actual Google Earth Engine error string on the app screen
+            st.error(f"Earth Engine Initialization Error: {e}")
+            raise e
 
 # Initialize using your verified Project ID
 
