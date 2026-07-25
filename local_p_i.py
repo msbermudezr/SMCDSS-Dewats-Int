@@ -9,6 +9,24 @@ import ee
 import io
 import streamlit as st
 import pandas as pd
+import streamlit as st
+import ee
+from google.oauth2 import service_account
+
+def initialize_ee():
+    if not ee.data._credentials:
+        # Load credentials dictionary from Streamlit Secrets
+        service_account_info = dict(st.secrets["gcp_service_account"])
+        
+        credentials = service_account.Credentials.from_service_account_info(
+            service_account_info,
+            scopes=['https://www.googleapis.com/auth/earthengine']
+        )
+        
+        ee.Initialize(
+            credentials=credentials, 
+            project=service_account_info["project_id"]
+        )
 
 # Initialize using your verified Project ID
 
@@ -17,11 +35,6 @@ def eval_en_av(shapely_point):
     lon = shapely_point.x
     lat = shapely_point.y
 
-    try:
-        ee.Initialize(project='sound-fastness-501600-k8')
-    except Exception as e:
-        ee.Authenticate()
-        ee.Initialize()
     """
     Samples nighttime light radiance from the NOAA VIIRS dataset in GEE.
     Categorizes the location's proximity/reliability to an active energy grid.
@@ -115,8 +128,6 @@ def dist__river(shapely_point):
 
     lon = shapely_point.x
     lat = shapely_point.y
-
-    ee.Initialize(project='sound-fastness-501600-k8')
     """
     Uses native Google Earth Engine FeatureCollection distance calculations
     to find the exact distance (in meters) to the nearest river stream.
@@ -299,12 +310,6 @@ def extract_macro_climate(shapely_point):
     lon = shapely_point.x
     lat = shapely_point.y
 
-    try:
-        ee.Initialize(project='sound-fastness-501600-k8')
-    except Exception as e:
-        ee.Authenticate()
-        ee.Initialize()
-
     """
     Extracts the Köppen-Geiger climate class from a global raster in GEE 
     and simplifies it into an operational macro-environmental profile using ranges.
@@ -347,11 +352,6 @@ def extract_macro_economics(shapely_point):
     lon = shapely_point.x
     lat = shapely_point.y
 
-    try:
-        ee.Initialize(project='sound-fastness-501600-k8')
-    except Exception as e:
-        ee.Authenticate()
-        ee.Initialize()
     """
     Queries the official USDOS LSIB dataset in GEE to find the country,
     then assigns a macro-economic tier using a clean country-level profile.
@@ -570,8 +570,6 @@ def get_slope(shapely_point):
     lon = shapely_point.x
     lat = shapely_point.y
 
-    ee.Initialize(project='sound-fastness-501600-k8')
-
     # 1. Define the point of interest
     point = ee.Geometry.Point([lon, lat])
     
@@ -601,6 +599,8 @@ def get_slope(shapely_point):
         return 0
 
 def evaluate_values(params):
+
+    initialize_ee()
     
     m_economics = extract_macro_economics(params['point'])
     macro_tier = m_economics['macro_economic_tier'] #tier 1 (high income), 2 (middle income), or 3 (low income)
