@@ -14,8 +14,7 @@ import ee
 from google.oauth2 import service_account
 
 def initialize_ee():
-    if not ee.data._credentials:
-        # Load credentials dictionary from Streamlit Secrets
+    if not ee.data.is_initialized():
         service_account_info = dict(st.secrets["gcp_service_account"])
         
         credentials = service_account.Credentials.from_service_account_info(
