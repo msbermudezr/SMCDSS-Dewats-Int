@@ -14,6 +14,7 @@ import ee
 from google.oauth2 import service_account
 
 def initialize_ee():
+def initialize_ee():
     if not ee.data.is_initialized():
         try:
             service_account_info = dict(st.secrets["gcp_service_account"])
@@ -26,9 +27,11 @@ def initialize_ee():
                 project=service_account_info["project_id"]
             )
         except Exception as e:
-            # This prints the actual Google Earth Engine error string on the app screen
-            st.error(f"Earth Engine Initialization Error: {e}")
-            raise e
+            # Display the full error string on screen in a yellow callout box
+            st.warning(f"EE INITIALIZATION ERROR DETAILS: {str(e)}")
+            # Do NOT re-raise immediately so Streamlit displays the message above
+            return False
+    return True
 
 # Initialize using your verified Project ID
 
