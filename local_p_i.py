@@ -14,7 +14,6 @@ import ee
 from google.oauth2 import service_account
 
 def initialize_ee():
-def initialize_ee():
     if not ee.data.is_initialized():
         try:
             service_account_info = dict(st.secrets["gcp_service_account"])
