@@ -161,7 +161,7 @@ def dist__river(shapely_point):
         return 100000.0
 
 
-def urban_road_den(shapely_point, radius_meters=3000, tier3_threshold_km_km2=25.0):
+def urban_road_den(shapely_point, radius_meters=3000, tier3_threshold_km_km2=10.0):
     """
     Downloads nearby roads, projects the network to accurately calculate length densities,
     and determines if an area is urban based strictly on Tier 3 (Local) road density.
